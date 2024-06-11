@@ -4,7 +4,7 @@ import mysql2 from 'mysql2'
 // Create a connection to the database using the specified configuration
 const db_connection = mysql2.createConnection({
     host: 'localhost', // Database host, typically 'localhost' for local development
-    database: 'gymsystem', // Name of the database to connect to
+    database: 'gym', // Name of the database to connect to
     user: 'root', // Database user, typically 'root' for local development
     password: '' // Database password, leave empty if not set
 })
