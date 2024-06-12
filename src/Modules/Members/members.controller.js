@@ -1,5 +1,6 @@
 // Import the database connection
 import db_connection from "../../../DB/connection.js";
+import { sendResponse } from "../../utils/response.js";
 
 // Function to add a new member
 export const addMember = (req, res, next) => {
@@ -8,7 +9,6 @@ export const addMember = (req, res, next) => {
     const {name, nationalId, phone, membershipFrom,membershipTo, cost, status, trainerId} = req.body
     // SQL query to check if a member with the same nationalId already exists
     const getNationalId = `SELECT * FROM member WHERE nationalId = '${nationalId}'`
-
     // SQL query to insert the new member into the database
     const insetQuery = 
     `INSERT INTO member (name, nationalId, phoneNumber, membershipFrom, membershipTo, membershipCost, status, trainerId)
@@ -18,28 +18,30 @@ export const addMember = (req, res, next) => {
     db_connection.query(getNationalId, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false ,message: 'Query Error', error: err.message})
+            return sendResponse(res,false , "Query Error" ,err.message) 
         }
     
         if(result.length){
             // Return a message if the member already exists
-            return res.json({success : false , message: "this member is already exist"})
+            return sendResponse(res,false,"this member already exist")
+            
         }
     
         // Execute the query to insert the new member into the database
         db_connection.query(insetQuery, (err, result)=>{
             if(err){
                 // Return an error message if the query fails
-                return res.json({success : false,message: 'Query Error', error: err.message})
+                return sendResponse(res,false,"Query Error" ,err.message)
             }
     
             if(!result.affectedRows){
                 // Return a message if the member was not added
-                return res.json({success : false , message: 'Member Not added'})
+                return sendResponse(res,false,"member not added")
             }
             
             // Return a success message with the new member's ID
-            return res.json({success : true , message: `Member added successfully with id ${result.insertId}`})
+            return sendResponse(res,true,`Member added successfully with id ${result.insertId}`)
+          
         })
     })
 
@@ -54,11 +56,10 @@ export const getMembersWithTrainer = (req, res, next)=>{
     db_connection.execute(selectQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false ,message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
-
         // Return a success message with the fetched data
-        return res.json({success : true ,message: "All members and member's trainer data fetched successfully", data: result})
+        return sendResponse(res,true,"done",result)
     })
 }
 
@@ -74,19 +75,19 @@ export const getMemberById =   (req, res, next)=>{
     db_connection.execute(selectQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false,message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error" , err.message)
         }
         
         // Check if the member's membership has expired or if they are deleted
         if(result && result[0].membershipTo < new Date()){
-            return res.json({message: "This member is not allowd to enter the gym"})
+            return sendResponse(res,false,"This member is not allowd to enter the gym")
         }else if(result && result[0].isDeleted == true){
-            return res.json({message: `Member with id ${id} is Deleted`})
+            return sendResponse(res,false ,`Member with id ${id} is Deleted`)  
         }else if(!result){
-            return res.json({message: "This Member Data Not Found!"})
+          return sendResponse(res,false,"member not found")
         }else {
             // Return a success message with the member's data
-            return res.json({message: "This member is allowed to enter the gym", data: result})
+            return sendResponse(res,true,"Done" ,result)
         }
     })
 }
@@ -99,10 +100,10 @@ export const membersRevenues = (req, res, next)=>{
     db_connection.execute(selectQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false , message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error" , err.message)
         }
         // Return a success message with the revenue data
-        return res.json({success : true , message: "Done", data: result})
+        return sendResponse(res,true,"Done",result)
     })
 }
 
