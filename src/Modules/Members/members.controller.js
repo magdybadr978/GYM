@@ -128,10 +128,10 @@ export const updateMember = (req, res, next)=>{
     db_connection.execute(updateQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false , message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
         // Return a success message with the updated data
-        return res.json({success : true ,message: "Done", data: result})
+        return sendResponse(res,true,"Done" , result)
     })
 }
 
@@ -147,9 +147,9 @@ export const softDeleteMember = (req, res, next)=>{
     db_connection.execute(softDeleteQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false , message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
         // Return a success message indicating the member was marked as deleted
-        return res.json({success : true , message: "Done"})
+        return sendResponse(res,true,"Done")
     })
 }

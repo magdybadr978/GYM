@@ -1,5 +1,6 @@
 // Import the database connection
 import db_connection from "../../../DB/connection.js";
+import { sendResponse } from "../../utils/response.js";
 
 // Function to add a new trainer
 export const addTrainer = (req, res, next)=>{
@@ -12,15 +13,15 @@ export const addTrainer = (req, res, next)=>{
     db_connection.query(insetQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false , message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
         
         if(!result.affectedRows){
             // Return a message if the trainer was not added
-            return res.json({success : false , message: 'Trainer Not added'})
+            return sendResponse(res,false,"Trainer not found")
         }
         // Return a success message if the trainer was added successfully
-        return res.json({success : true ,   message: 'Trainer Added Successfully'})
+        return sendResponse(res,true,"Done",result)
     })
 }
 
@@ -33,10 +34,10 @@ export const getTrainerWithMembers = (req, res, next)=>{
     db_connection.execute(selectQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false , message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
         // Return a success message with the fetched data
-        return res.json({success : true , message: "Done", data: result})
+          return sendResponse(res,true,"Done",result)
     })
 }
 
@@ -51,14 +52,14 @@ export const getTrainerById = (req, res, next)=> {
     db_connection.execute(selectQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false ,message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
         if(!result.length){
             // Return a message if the trainer was not found
-            return res.json({success : false , message: 'This trainer Not Found!'})
+            return sendResponse(res,false,"Trainer not found")
         }
         // Return a success message with the fetched data
-        return res.json({success : true ,message: "Done", data: result})
+        return sendResponse(res,true,"Done",result)
     })
 }
 
@@ -72,15 +73,14 @@ export const trainerRevenues = (req, res, next)=>{
     db_connection.execute(selectQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false , message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
         if(!result.length){
             // Return a message if the trainer was not found
-            return res.json({success : false , message: 'This trainer Not Found!'})
+            return sendResponse(res,false,"Trainer not found")
         }
-
         // Return a success message with the revenue data
-        return res.json({success : true , message: "Done", data: result})
+          return sendResponse(res,true,"Done",result)
     })
 }
 
@@ -103,11 +103,10 @@ export const updateTrainer = (req, res, next)=>{
     db_connection.execute(updateQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false ,message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
-
         // Return a success message with the updated data
-        return res.json({success : true , message: "Done", data: result})
+        return sendResponse(res,true,"Done",result)
     })
 }
 
@@ -116,7 +115,6 @@ export const updateTrainer = (req, res, next)=>{
 export const deleteTrainer = (req, res, next)=>{
     // Destructure the trainer ID from the request parameters
     const {id} = req.params
-
     // SQL query to delete the trainer from the database
     const deleteQuery = `DELETE FROM trainer WHERE id = ${id}`
 
@@ -124,10 +122,10 @@ export const deleteTrainer = (req, res, next)=>{
     db_connection.execute(deleteQuery, (err, result)=>{
         if(err){
             // Return an error message if the query fails
-            return res.json({success : false , message: 'Query Error', error: err.message})
+            return sendResponse(res,false,"Query Error",err.message)
         }
 
         // Return a success message indicating the trainer was deleted
-        return res.json({success : true , message: 'Done'})
+        return sendResponse(res,true,"Done")
     })
 }
