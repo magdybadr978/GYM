@@ -25,7 +25,7 @@ router.get('/membersrevenues', memberController.membersRevenues)
 router.put('/updatemember/:id', memberController.updateMember)
 
 // Route to soft delete a specific member by their ID (mark as deleted without removing from the database)
-router.put('/deletemember/:id', memberController.softDeleteMember)
+router.delete('/deletemember/:id', memberController.softDeleteMember)
 
 // Export the router instance for use in other parts of the application
 export default router

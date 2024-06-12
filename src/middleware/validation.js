@@ -10,8 +10,8 @@ const validateObjectId = (value, helper) => {
 };
 
 export const generalFields = {
-  id: joi.string().custom(validateObjectId).required(),
-  idNotRequired: joi.string().custom(validateObjectId),
+  id: joi.string().required(),
+  idNotRequired: joi.string(),
   name: joi
     .string()
     .min(2)

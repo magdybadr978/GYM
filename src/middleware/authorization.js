@@ -1,6 +1,7 @@
 
 import { StatusCodes } from "http-status-codes";
 import { asyncHandler } from "../utils/ErrorHandling.js";
+import { ErrorClass } from "../utils/ErrorClass.js";
 
 
 
