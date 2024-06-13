@@ -1,13 +1,6 @@
 import joi from "joi";
-import { Types } from "mongoose";
 const dataMethods = ["body", "params", "query", "headers", "file", "files"];
 
-
-const validateObjectId = (value, helper) => {
-  return Types.ObjectId.isValid(value)
-    ? true
-    : helper.message("In-valid objectId");
-};
 
 export const generalFields = {
   id: joi.string().required(),
@@ -16,7 +9,7 @@ export const generalFields = {
     .string()
     .min(2)
     .max(20)
-    .label("يجب ان لا يقل الاسم عن حرفين ولا يزيد عن 20 حرف"),
+    .label("name must be between 2 or 20 characters"),
   file: joi.object({
     size: joi.number().positive().required(),
     path: joi.string().required(),
@@ -31,19 +24,19 @@ export const generalFields = {
     .string()
     .pattern(new RegExp(/^(01)(0|1|2|5)[0-9]{8}$/))
     .required()
-    .label("ادخل رقم هاتف صحيح"),
+    .label("enter valid number please"),
   password: joi
     .string()
     //.pattern( new RegExp( /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/ ) ),
     .pattern(
       new RegExp(/^[a-zA-Z\u0600-\u06FF0-9\s!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-]*$/)
     )
-    .label(" يجب ان لا يقل الرقم السري عن 8 حروف و يحتوى على حروف وارقام  "),
+    .label("password must be greater than 8 chars and contain nums and chars"),
   code: joi
     .string()
     .pattern(new RegExp(/^[0-9]{5}$/))
     .required()
-    .label(`ادخل الكود كامل`),
+    .label("enter fall code please"),
 };
 
 export const isValid = (schema) => {
