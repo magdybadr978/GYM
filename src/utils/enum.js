@@ -3,3 +3,4 @@ export const roles = {
   memeber : "Member",
   trainer : "Trainer"
 }
+Object.freeze(roles);
