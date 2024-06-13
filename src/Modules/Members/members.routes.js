@@ -40,7 +40,11 @@ router.get(
 );
 
 // Route to calculate the all members revenues
-router.get("/membersrevenues", isAuthenticated,memberController.membersRevenues);
+router.get(
+  "/membersrevenues",
+  isAuthenticated,
+  memberController.membersRevenues
+);
 
 // Route to update the data of a specific member (name, membership, trainerId) by their ID
 router.put(
@@ -55,7 +59,7 @@ router.put(
 router.delete(
   "/deletemember/:id",
   isAuthenticated,
-  isAuthorized([roles.admin,roles.trainer]),
+  isAuthorized([roles.admin, roles.trainer]),
   isValid(membersValidationJs.paramsForIdSchema),
   memberController.softDeleteMember
 );
